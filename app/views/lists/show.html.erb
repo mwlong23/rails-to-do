@@ -4,14 +4,16 @@
 <h1><%= @list.name %></h1>
 
 
-
 <% if @list.tasks.any? %>
 <h4>Here are the tasks for this list:</h4>
 
+<h2>Unfinished Tasks</h2>
 <ul>
-  <% @list.tasks.each do |task| %>
+  <% @list.tasks.not_done.each do |task| %>
     <li>
       <%= task.description %> |
+      <%= task.done %> |
+      <%= check_box_tag(:done)%>
       <%= link_to "Edit", edit_list_task_path(@list, task) %> |
       <%= link_to "Delete", list_task_path(@list, task),
                                :data => {:confirm => "Are you sure?",
@@ -23,9 +25,20 @@
 <p>There are no tasks yet!</p>
 <% end %>
 
-
-
-
+<h2>Finished Tasks</h2>
+<ul>
+  <% @list.tasks.done.each do |task| %>
+    <li>
+      <%= task.description %> |
+      <%= task.done %> |
+      <%= check_box_tag(:done)%>
+      <%= link_to "Edit", edit_list_task_path(@list, task) %> |
+      <%= link_to "Delete", list_task_path(@list, task),
+                               :data => {:confirm => "Are you sure?",
+                                              :method => "delete"} %>
+    </li>
+  <% end %>
+</ul>
 
 
 <p><%= link_to "Add a task", new_list_task_path(@list) %></p>
