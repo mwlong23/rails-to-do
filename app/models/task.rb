@@ -1,12 +1,9 @@
 class Task < ActiveRecord::Base
-  belongs_to :list
+  belongs_to :list, optional: true
 
   validates :description, :presence => true
 
-  scope :not_done, -> do
-    where({:done => false})
-  end
-  scope :done, -> do
-    where({:done => true})
-  end
+  scope :not_done, -> { where(:done => false) }
+  scope :done, -> { where(:done => true) }
+  scope :today, -> { where("created_at >=?", Time.now.beginning_of_day)}
 end
